@@ -12,6 +12,9 @@ This Extension is used to make payments using Go Cuotas API in Argentina.
 - Create a folder [root]/app/code/FS/GoCuotas
 - Download module ZIP
 - Copy to folder
+- test credentials: 
+username:seller_sandbox@gocuotas.com
+password:secret
 
 Then you'll need to activate the module.
 

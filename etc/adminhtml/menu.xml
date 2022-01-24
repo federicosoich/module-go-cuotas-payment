@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+
+    <menu>
+        <add id="FS_GoCuotas::pay"
+             title="Go Cuotas Payment"
+             module="FS_GoCuotas"
+             sortOrder="-1"
+             resource="FS_GoCuotas::pay"
+             parent="Magento_Backend::stores" />
+
+        <add id="FS_GoCuotas::pay_settings"
+             title="Payment Settings"
+             module="FS_GoCuotas"
+             sortOrder="1"
+             resource="FS_GoCuotas::pay"
+             parent="FS_GoCuotas::pay"
+             action="adminhtml/system_config/edit/section/payment/" />
+    </menu>
+
+</config>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
+    <default>
+        <payment>
+            <gocuotas>
+                <payment_action>capture</payment_action>
+                <model>FS\GoCuotas\Model\Vpos</model>
+                <active>1</active>
+                <title>Go Cuotas</title>
+                <order_status>pending</order_status>
+                <message>Serás redirigido a Go Cuotas para completar el pago</message>
+                 <granttype>client_credentials</granttype>     
+                <token_url>https://auth.stage.ua.la/1/auth/token</token_url>
+                <checkout_url>https://checkout.stage.ua.la/1/checkout</checkout_url>
+            </gocuotas>
+        </payment>
+    </default>
+</config>

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="payment">
+                <group id="gocuotas" translate="label" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+
+                    <label>Go Cuotas Payment</label>
+
+                    <field id="active" translate="label comment" sortOrder="1" type="select" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Enable</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+
+                    <field id="title" translate="label comment" sortOrder="2" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Title</label>
+                        <comment>You can change this message</comment>
+                    </field>
+
+                    <field id="message" translate="label comment" sortOrder="3" type="text" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Checkout Message</label>
+                        <comment>You can change this message</comment>
+                    </field>
+
+                    <field id="email" translate="label comment" sortOrder="4" type="text" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Email</label>
+                        <comment>"seller_sandbox@gocuotas.com" for test</comment>
+                    </field>
+                  
+                    <field id="password" translate="label comment" sortOrder="6" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Password</label>
+                        <comment>"secret" for test</comment>
+                    </field>
+                </group>
+        </section>
+    </system>
+</config>

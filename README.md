@@ -17,6 +17,8 @@ username:seller_sandbox@gocuotas.com<br>
 password:secret
 
 - Documentation: https://www.gocuotas.com/api_redirect_docs
+- Note: if your place order button is broke please try to remove from lines 23 to 30 of this file<br>
+/view/frontend/web/template/payment/gocuotas.html 
 
 Then you'll need to activate the module.
 

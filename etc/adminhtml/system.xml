@@ -30,6 +30,11 @@
                         <label>Password</label>
                         <comment>"secret" for test</comment>
                     </field>
+
+                    <field id="email_invoice" translate="label comment" sortOrder="7" type="select" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Send email invoice</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
                 </group>
         </section>
     </system>

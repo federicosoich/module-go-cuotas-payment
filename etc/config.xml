@@ -6,6 +6,7 @@
                 <payment_action>capture</payment_action>
                 <model>FS\GoCuotas\Model\Vpos</model>
                 <active>1</active>
+                <send_invoice>1</send_invoice>
                 <title>Go Cuotas</title>
                 <order_status>pending</order_status>
                 <message>Serás redirigido a Go Cuotas para completar el pago</message>

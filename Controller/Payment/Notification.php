@@ -7,24 +7,32 @@ use \Magento\Sales\Model\Order;
 use \Magento\Framework\Exception\NotFoundException;
 use \Magento\Sales\Model\Service\InvoiceService;
 use \Magento\Framework\DB\Transaction; 
+use \Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
+use \Magento\Framework\App\Config\ScopeConfigInterface;
 
 class Notification extends \Magento\Framework\App\Action\Action
 {
     public $context;
     protected $order;
     protected $invoiceService;
+    protected $invoiceSender;
     protected $transaction;
+    protected $scopeConfig;
 
     public function __construct(
         Context $context,
         Order $order,
         InvoiceService $invoiceService,
-        Transaction $transaction
+        InvoiceSender $invoiceSender,
+        Transaction $transaction,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->context = $context;
         $this->order = $order;
         $this->invoiceService = $invoiceService;
+        $this->invoiceSender = $invoiceSender;
         $this->transaction    = $transaction;
+        $this->scopeConfig = $scopeConfig;
         parent::__construct($context);
     }
 
@@ -35,6 +43,7 @@ class Notification extends \Magento\Framework\App\Action\Action
             $increm = $postData['order_reference_id'];
             $status = $postData['status'];
             $order = $this->order->loadByIncrementId($increm);
+
             if ($status=='approved')
                 {
                     $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING, true);
@@ -47,6 +56,8 @@ class Notification extends \Magento\Framework\App\Action\Action
                         $transactionSave = $this->transaction->addObject($invoice)->addObject($invoice->getOrder());
                         $transactionSave->save();
                         $order->addStatusHistoryComment(__('Invoiced', $invoice->getId()))->setIsCustomerNotified(false)->save();
+                        if ($this->scopeConfig->getValue('payment/gocuotas/email_invoice', \Magento\Store\Model\ScopeInterface::SCOPE_STORE))
+                            $this->invoiceSender->send($invoice);
                     }
                 } else
                 {

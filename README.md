@@ -6,6 +6,7 @@ This Extension is used to make payments using Go Cuotas API in Argentina.
 - Generate pending orders and using return parameters back and change to order status cancel or processing (and create invoice).
 - Add notification url to get updates using webhook_url
 - cancel order and regenerate a new one and redirect to checkout on failing payment.
+- configure for send invoice by email on payment success
 
 ## Manual Installation
 

@@ -58,10 +58,10 @@ class Notification extends \Magento\Framework\App\Action\Action
                             $this->invoiceSender->send($invoice);
                     }
                 $message =  __('Notificacion Automatica de Go Cuotas: el pago fue aprobado');
-                $message .= __('<br/> Orden GoCuotas: %1', $postData['order_id']);
-                $message .= __('<br/> Status: %1',$postData['status']);
-                $message .= __('<br/> Cuotas:', $postData['number_of_installments']);
-                $message .= __('<br/> Total:', ($postData['amount_in_cents']/100));
+                $message .= __('<br/> Orden GoCuotas:'.$postData['order_id']);
+                $message .= __('<br/> Status: '.$postData['status']);
+                $message .= __('<br/> Cuotas:'.$postData['number_of_installments']);
+                $message .= __('<br/> Total:'.($postData['amount_in_cents']/100));
                 $order->addStatusToHistory(\Magento\Sales\Model\Order::STATE_PROCESSING, $message, true);
                 $order->save();
                 } else

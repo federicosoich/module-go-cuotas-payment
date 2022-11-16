@@ -47,8 +47,6 @@ class Notification extends \Magento\Framework\App\Action\Action
             if ($status=='approved')
                 {
                     $order->setState(\Magento\Sales\Model\Order::STATE_PROCESSING, true);
-                    $order->setStatus(\Magento\Sales\Model\Order::STATE_PROCESSING);
-                    $this->order->save();
                     if ($order->canInvoice()) {
                         $invoice = $this->invoiceService->prepareInvoice($this->order);
                         $invoice->register();
@@ -59,6 +57,13 @@ class Notification extends \Magento\Framework\App\Action\Action
                         if ($this->scopeConfig->getValue('payment/gocuotas/email_invoice', \Magento\Store\Model\ScopeInterface::SCOPE_STORE))
                             $this->invoiceSender->send($invoice);
                     }
+                $message =  __('Notificacion Automatica de Go Cuotas: el pago fue aprobado');
+                $message .= __('<br/> Orden GoCuotas: %1', $postData['order_id']);
+                $message .= __('<br/> Status: %1',$postData['status']);
+                $message .= __('<br/> Cuotas:', $postData['number_of_installments']);
+                $message .= __('<br/> Total:', ($postData['amount_in_cents']/100));
+                $order->addStatusToHistory(\Magento\Sales\Model\Order::STATE_PROCESSING, $message, true);
+                $order->save();
                 } else
                 {
                     if ($order->getStatus()=='pending')

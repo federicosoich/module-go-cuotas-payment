@@ -1,5 +1,4 @@
 <?php
-
 namespace FS\GoCuotas\Controller\Payment;
 
 use \Magento\Framework\App\Action\Context;
@@ -9,8 +8,10 @@ use \Magento\Sales\Model\Service\InvoiceService;
 use \Magento\Framework\DB\Transaction; 
 use \Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
 use \Magento\Framework\App\Config\ScopeConfigInterface;
+use \Magento\Framework\App\RequestInterface;
+use \Magento\Framework\App\Request\InvalidRequestException;
 
-class Notification extends \Magento\Framework\App\Action\Action
+class Notification extends \Magento\Framework\App\Action\Action implements \Magento\Framework\App\CsrfAwareActionInterface
 {
     public $context;
     protected $order;
@@ -18,6 +19,24 @@ class Notification extends \Magento\Framework\App\Action\Action
     protected $invoiceSender;
     protected $transaction;
     protected $scopeConfig;
+    
+        /**
+     * @param RequestInterface $request
+     * @return InvalidRequestException|null
+     */
+    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
+    {
+        return null;
+    }
+
+    /**
+     * @param RequestInterface $request
+     * @return bool|null
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
+    }
 
     public function __construct(
         Context $context,
@@ -38,8 +57,11 @@ class Notification extends \Magento\Framework\App\Action\Action
 
     public function execute()
     {
+   
+    
         try {
-            $postData = $this->getRequest()->getPost();
+            
+            $postData = json_decode($this->getRequest()->getContent(), true);
             $increm = $postData['order_reference_id'];
             $status = $postData['status'];
             $order = $this->order->loadByIncrementId($increm);
@@ -57,13 +79,13 @@ class Notification extends \Magento\Framework\App\Action\Action
                         if ($this->scopeConfig->getValue('payment/gocuotas/email_invoice', \Magento\Store\Model\ScopeInterface::SCOPE_STORE))
                             $this->invoiceSender->send($invoice);
                     }
-                $message =  __('Notificacion Automatica de Go Cuotas: el pago fue aprobado');
-                $message .= __('<br/> Orden GoCuotas:'.$postData['order_id']);
-                $message .= __('<br/> Status: '.$postData['status']);
-                $message .= __('<br/> Cuotas:'.$postData['number_of_installments']);
-                $message .= __('<br/> Total:'.($postData['amount_in_cents']/100));
-                $order->addStatusToHistory(\Magento\Sales\Model\Order::STATE_PROCESSING, $message, true);
-                $order->save();
+                    $message =  __('Notificacion Automatica de Go Cuotas: el pago fue aprobado');
+                    $message .= __('<br/> Orden GoCuotas:'.$postData['order_id']);
+                    $message .= __('<br/> Status: '.$postData['status']);
+                    $message .= __('<br/> Cuotas:'.$postData['number_of_installments']);
+                    $message .= __('<br/> Total:'.($postData['amount_in_cents']/100));
+                    $order->addStatusToHistory(\Magento\Sales\Model\Order::STATE_PROCESSING, $message, true);
+                    $order->save();
                 } else
                 {
                     if ($order->getStatus()=='pending')
@@ -77,7 +99,8 @@ class Notification extends \Magento\Framework\App\Action\Action
                         }  
                 }        
         } catch (Exception $e) {
-            echo $e->getMessage();
+            //echo $e->getMessage();
+            $logger->info($e->getMessage());
         }
     }
 }

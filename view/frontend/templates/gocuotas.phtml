@@ -1,0 +1,37 @@
+<script>
+window.onload = function () {
+document.getElementById("action").click(); };
+function eventIframe() {
+alert(document.getElementById("gocuotas").contentWindow.location.href); 
+};
+</script>
+<h1 class="fs-sm-48 fs-32 fw-bold m-0">
+Compra en CUOTAS
+<br class="d-lg-block">
+SIN interés con
+<u>DÉBITO</u>
+<br>
+</h1>
+
+<button onclick="location.href='/checkout/#payment';" class="action primary tocart" id="product-addtocart-button">
+                <span>Volver al checkout</span>
+            </button>
+<button onclick='document.getElementById("action").click();' class="action primary tocart" id="product-addtocart-button">
+            <span>PAGAR GO CUOTAS</span>
+</button>
+
+<style type="text/css">
+            .modal-popup .modal-inner-wrap {
+            width: 650px !important;
+            height: 800px;
+            }
+            
+        </style>
+<button style="visibility:hidden" class="action" id="action" type="button" data-trigger="trigger"> </button>
+<div data-bind="mageInit: {
+                'Magento_Ui/js/modal/modal':{
+                    'type': 'popup',
+                    'trigger': '[data-trigger=trigger]',
+                    'responsive': true,
+                    buttons: []
+                }}"><iframe id="gocuotas" onload="eventIframe()" src="https://app.magento2.test/gocuotas/payment/popup" width="600px" height="800px" frameborder="0"></iframe></div>

@@ -61,7 +61,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $email = $this->scopeConfig->getValue('payment/gocuotas/email',\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
             $password = $this->scopeConfig->getValue('payment/gocuotas/password',\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
             //get token
-            $url = "https://www.gocuotas.com/api_redirect/v1/authentication";
+            $url = "https://api-magento.gocuotas.com/api_redirect/v1/authentication";
        
             $curl = curl_init($url);
             curl_setopt($curl, CURLOPT_URL, $url);
@@ -86,11 +86,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $order = $this->order
             ->create()
             ->loadByIncrementId($increment_id);
-            //echo $order->getGrandTotal();
             $base = $this->scopeConfig->getValue('web/secure/base_url',\Magento\Store\Model\ScopeInterface::SCOPE_STORE); 
 
-            $url = "https://www.gocuotas.com/api_redirect/v1/checkouts?amount_in_cents=".($order->getGrandTotal()*100)."&order_reference_id=".$increment_id."&url_success=".$base."gocuotas/payment/success/&webhook_url=".$base."gocuotas/payment/notification/&url_failure=".$base."gocuotas/payment/failure/&email=".$customer;
-
+            $url = "https://api-magento.gocuotas.com/api_redirect/v1/checkouts?amount_in_cents=".
+            ($order->getGrandTotal()*100)."&order_reference_id=".$increment_id."&url_success="
+            .$base."gocuotas/payment/success/&webhook_url=".$base."gocuotas/payment/notification/code/".$order->getIncrementId()."&url_failure=".$base."gocuotas/payment/failure/&email=".$customer;
             $curl = curl_init($url);
             curl_setopt($curl, CURLOPT_URL, $url);
             curl_setopt($curl, CURLOPT_POST, true);
@@ -108,19 +108,68 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $resp = curl_exec($curl);
             curl_close($curl);
             $arre=json_decode($resp, true);
-            return $arre['url_init'];
+            if ($this->isRedirect())
+                return $arre['url_init'];
+            else return str_replace("www.gocuotas.com","api-magento.gocuotas.com",$arre['url_init']);
         }
         catch(Exception $e) {
             echo $e->getMessage();
         }
 	}
 
+    
     public function getMessage()
     {
-        return $this->scopeConfig->getValue(
+        if ($this->scopeConfig->getValue(
+            'payment/gocuotas/redirect',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE))
+            return $this->scopeConfig->getValue(
             'payment/gocuotas/message',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
+        ); else return $this->scopeConfig->getValue(
+            'payment/gocuotas/messagepopup',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ); 
     }
 
+    public function getAlert()
+    {
+        return $this->scopeConfig->getValue(
+            'payment/gocuotas/messagepopupalert',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        ); 
+    }
+
+    public function encryptDecrypt($action, $string)
+    {
+        $output = false;
+ 
+        $encrypt_method = "AES-128-ECB";
+        $secret_key =  $this->scopeConfig->getValue('payment/gocuotas/email',\Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        $key = hash('sha256', $secret_key);
+        if ($action == self::ENCRYPT) {
+            $output = openssl_encrypt($string, $encrypt_method, $key);
+        } elseif ($action == self::DECRYPT) {
+            $output = openssl_decrypt($string, $encrypt_method, $key);
+        }
+ 
+        return $output;
+    }
+
+    public function encodeUrl($url)
+    {
+        return $this->urlEncode->encode($url);
+    }
+ 
+    public function decodeUrl($url)
+    {
+        return $this->urlDecode->decode($url);
+    }
+
+    public function isRedirect()
+    {
+        return ((boolean)$this->scopeConfig->getValue(
+            'payment/gocuotas/redirect',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE));
+    }
 }

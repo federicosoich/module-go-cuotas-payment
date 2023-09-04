@@ -10,6 +10,7 @@ use \Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
 use \Magento\Framework\App\Config\ScopeConfigInterface;
 use \Magento\Framework\App\RequestInterface;
 use \Magento\Framework\App\Request\InvalidRequestException;
+use \FS\GoCuotas\Helper\Data;
 
 class Notification extends \Magento\Framework\App\Action\Action implements \Magento\Framework\App\CsrfAwareActionInterface
 {
@@ -19,7 +20,7 @@ class Notification extends \Magento\Framework\App\Action\Action implements \Mage
     protected $invoiceSender;
     protected $transaction;
     protected $scopeConfig;
-    
+    protected $helper;
         /**
      * @param RequestInterface $request
      * @return InvalidRequestException|null
@@ -41,6 +42,7 @@ class Notification extends \Magento\Framework\App\Action\Action implements \Mage
     public function __construct(
         Context $context,
         Order $order,
+        Data $helper,
         InvoiceService $invoiceService,
         InvoiceSender $invoiceSender,
         Transaction $transaction,
@@ -52,6 +54,7 @@ class Notification extends \Magento\Framework\App\Action\Action implements \Mage
         $this->invoiceSender = $invoiceSender;
         $this->transaction    = $transaction;
         $this->scopeConfig = $scopeConfig;
+        $this->helper = $helper;
         parent::__construct($context);
     }
 
@@ -60,9 +63,13 @@ class Notification extends \Magento\Framework\App\Action\Action implements \Mage
    
     
         try {
-            
+            $code = $this->getRequest()->getParams()["code"];
+            echo $this->helper->decodeUrl($code);
+            //die();
             $postData = json_decode($this->getRequest()->getContent(), true);
             $increm = $postData['order_reference_id'];
+            if (!$this->helper->decodeUrl($code)==$increm)
+                throw new \Exception('Validation postcode fails');
             $status = $postData['status'];
             $order = $this->order->loadByIncrementId($increm);
 

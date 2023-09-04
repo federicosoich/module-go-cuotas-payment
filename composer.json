@@ -1,25 +1,18 @@
 {
-    "name": "fs/gocuotas",
-    "description": "Simple Hello World Module for Magento 2",
+    "name": "ffss/module-go-cuotas-payment",
+    "description": "Go Cuotas Payment Module",
     "type": "magento2-module",
+    "version": "0.1.0",
+    "require": {
+      "php": "^7.0.0"
+    },
     "license": [
-        "OSL-3.0",
-        "AFL-3.0"
+      "MIT"
     ],
-    "authors": [
-        {
-            "email": "mukesh.fs@gmail.com",
-            "name": "Mukesh FS"
-        }
-    ],
-    "minimum-stability": "dev",
-    "require": {},
     "autoload": {
-        "files": [
-            "registration.php"
-        ],
-        "psr-4": {
-            "FS\\GoCuotas\\": ""
-        }
+      "files": [ "registration.php" ],
+      "psr-4": {
+        "FS\\GoCuotas\\": ""
+      }
     }
-}
+  }

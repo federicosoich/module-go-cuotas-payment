@@ -1,26 +1,59 @@
-# Simple Hello World Module - Extension for Magento 2.x
+# FS_GoCuotas for Magento 2
 
-This is a basic/simple gocuotas module in Magento2. 
+This Extension is used to make payments using Go Cuotas API in Argentina.
 
-It can be a good starting point on developing a module in Magento 2.x.
+- Allow end user set credentials, checkout message and name of payment method 
+- Generate pending orders and using return parameters back and change to order status cancel or processing (and create invoice).
+- Add notification url to get updates using webhook_url
+- cancel order and regenerate a new one and redirect to checkout on failing payment.
+- configure for send invoice by email on payment success
 
-## Installation
+## Manual Installation
 
-1. The module's files should be placed in folder: `app/code/FS/GoCuotas`
-2. Open terminal/command-prompt
-3. Go to your Magento website’s root directory with the following command:
-    - `cd /path/to/your/magento/root/directory`
-4. Enable the module and clear static content with the following command:
-    - `php bin/magento module:enable FS_GoCuotas –clear-static-content`
-5. Do setup upgrade with the following command:
-    - `php bin/magento setup:upgrade`
-6. Flush cache with the following command:
-    - `php bin/magento cache:flush`
-7. That's all. The extension is installed now.
-8. You can browse to: http://your-magento-site/gocuotas . It will print a "Hello World" message on that page.
+- Create a folder [root]/app/code/FS/GoCuotas
+- Download module ZIP from <a href="https://github.com/federicosoich/module-go-cuotas-payment/archive/refs/heads/master.zip">HERE</a>
+- Copy to folder
+- test credentials:<br> 
+username:seller_sandbox@gocuotas.com<br>
+password:secret
 
-![alt text](https://lh3.googleusercontent.com/-FK2DY0I8qUw/VugXrxwySqI/AAAAAAAAAc8/4NplklqcWW8_A2r54_PlSt3p5f4veNIBgCCo/s499-Ic42/Selection_035.png "Simple Hello World Module - Magento 2")
+- Documentation: https://www.gocuotas.com/api_redirect_docs
+- Note: if your place order button is broke please try to remove from lines 23 to 30 of this file<br>
+/view/frontend/web/template/payment/gocuotas.html 
 
-## Blog
+Then you'll need to activate the module.
 
-http://blog.fs.com.np/magento-2-create-a-simple-hello-world-module-step-by-step-beginner-tutorial/
+```
+bin/magento setup:upgrade
+bin/magento setup:di:compile
+bin/magento cache:clean
+bin/magento cache:flush
+```
+
+## Uninstall
+
+```
+bin/magento module:uninstall FS_GoCuotas
+```
+
+## Support
+
+No warranty or support provided.
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+### How to create a PR
+
+1. Fork it
+2. Create your feature branch (git checkout -b my-new-feature)
+3. Commit your changes (git commit -am 'Add some feature')
+4. Push to the branch (git push origin my-new-feature)
+5. Create new Pull Request
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)

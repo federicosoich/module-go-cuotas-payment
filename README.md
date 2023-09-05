@@ -17,7 +17,8 @@ This Extension is used to make payments using Go Cuotas API in Argentina.
 OR
 
 - composer require ff-ss/go-cuotas-payment
-  
+
+THEN
 - test credentials:<br> 
 username:seller_sandbox@gocuotas.com<br>
 password:secret

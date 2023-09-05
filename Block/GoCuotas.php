@@ -1,18 +1,25 @@
 <?php
+
 namespace FS\GoCuotas\Block;
+
+use \FS\GoCuotas\Helper\Data;
+
 class GoCuotas extends \Magento\Framework\View\Element\Template
 {        
+    protected $helper;
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,        
+        \Magento\Backend\Block\Template\Context $context,   
+        Data $helper,
         array $data = []
     )
     {        
         parent::__construct($context, $data);
+        $this->helper = $helper;
     }
     
-    public function getGoCuotas()
+    public function getGoCuotasUrl()
     {
-        return 'Hello World';
+        return $this->helper->generatePopupUrl();
     }
     
 }

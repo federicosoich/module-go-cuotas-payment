@@ -8,11 +8,16 @@ This Extension is used to make payments using Go Cuotas API in Argentina.
 - cancel order and regenerate a new one and redirect to checkout on failing payment.
 - configure for send invoice by email on payment success
 
-## Manual Installation
+## Installation
 
 - Create a folder [root]/app/code/FS/GoCuotas
 - Download module ZIP from <a href="https://github.com/federicosoich/module-go-cuotas-payment/archive/refs/heads/master.zip">HERE</a>
 - Copy to folder
+
+OR
+
+- composer require ff-ss/go-cuotas-payment
+  
 - test credentials:<br> 
 username:seller_sandbox@gocuotas.com<br>
 password:secret

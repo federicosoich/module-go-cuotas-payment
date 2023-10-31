@@ -39,7 +39,10 @@ class Checkoutinit implements \Magento\Framework\Event\ObserverInterface
             $order = $this->order->load($id);    
             $cart = $this->cart;
             $quote = $this->session->getQuote();
-            if ($order->getStatus()=="pending") {
+            $payment = $order->getPayment();
+            $method = $payment->getMethodInstance();
+            $code = $method->getCode();
+            if ($order->getStatus()=="pending" && $code=="gocuotas") {
                 $this->order->setState(\Magento\Sales\Model\Order::STATE_CANCELED, true);
                 $this->order->setStatus(\Magento\Sales\Model\Order::STATE_CANCELED);
                 foreach ($this->order->getAllItems() as $item) { // Cancel order items

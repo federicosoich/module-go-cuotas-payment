@@ -37,33 +37,37 @@ class Checkoutinit implements \Magento\Framework\Event\ObserverInterface
         try {
             $id = $this->session->getLastRealOrder()->getId();
             $order = $this->order->load($id);    
-            $cart = $this->cart;
-            $quote = $this->session->getQuote();
-            $payment = $order->getPayment();
-            $method = $payment->getMethodInstance();
-            $code = $method->getCode();
-            if ($order->getStatus()=="pending" && $code=="gocuotas") {
-                $this->order->setState(\Magento\Sales\Model\Order::STATE_CANCELED, true);
-                $this->order->setStatus(\Magento\Sales\Model\Order::STATE_CANCELED);
-                foreach ($this->order->getAllItems() as $item) { // Cancel order items
-                    $prod = $this->product->loadByAttribute("sku",$item->getSku());
-                    $item->cancel();
-                    $quote->addProduct($prod, $item->getQty());
-                }
-                $this->order->save();
-                $cart->save();
-                $quote->setCustomerId($order->getCustomerId());
-                $quote->getBillingAddress()->addData($order->getBillingAddress()->toArray());
-                $quote->getShippingAddress()->addData($order->getShippingAddress()->toArray());
-                $shippingAddress=$quote->getShippingAddress();
-                $shippingAddress->setCollectShippingRates(true)
-                                ->collectShippingRates()
-                                ->setShippingMethod($order->getShippingMethod()); 
-                $quote->save();     
-                $quote->collectTotals();   
-                $this->responseFactory->create()->setRedirect("/checkout/#payment")->sendResponse();    
-                }
-            return $this;
+            if ($order->getIncrementId())
+            {
+                $cart = $this->cart;
+                $quote = $this->session->getQuote();
+                $payment = $order->getPayment();    
+                $method = $payment->getMethodInstance();
+                $code = $method->getCode();
+                if ($order->getStatus()=="pending" && $code=="gocuotas") {
+                    $this->order->setState(\Magento\Sales\Model\Order::STATE_CANCELED, true);
+                    $this->order->setStatus(\Magento\Sales\Model\Order::STATE_CANCELED);
+                    foreach ($this->order->getAllItems() as $item) { // Cancel order items
+                        $prod = $this->product->loadByAttribute("sku",$item->getSku());
+                        $item->cancel();
+                        $quote->addProduct($prod, $item->getQty());
+                    }
+                    $this->order->save();
+                    $cart->save();
+                    $quote->setCustomerId($order->getCustomerId());
+                    $quote->getBillingAddress()->addData($order->getBillingAddress()->toArray());
+                    $quote->getShippingAddress()->addData($order->getShippingAddress()->toArray());
+                    $shippingAddress=$quote->getShippingAddress();
+                    $shippingAddress->setCollectShippingRates(true)
+                                    ->collectShippingRates()
+                                    ->setShippingMethod($order->getShippingMethod()); 
+                    $quote->save();     
+                    $quote->collectTotals();   
+                    $this->responseFactory->create()->setRedirect("/checkout/#payment")->sendResponse();    
+                    }
+                return $this;
+            }
+            
         } catch (InputException $e) {
         echo $e->getMessage();
         }

@@ -65,7 +65,6 @@ class Notification extends \Magento\Framework\App\Action\Action implements \Mage
         try {
             $code = $this->getRequest()->getParams()["code"];
             echo $this->helper->decodeUrl($code);
-            //die();
             $postData = json_decode($this->getRequest()->getContent(), true);
             $increm = $postData['order_reference_id'];
             if (!$this->helper->decodeUrl($code)==$increm)
@@ -106,7 +105,6 @@ class Notification extends \Magento\Framework\App\Action\Action implements \Mage
                         }  
                 }        
         } catch (Exception $e) {
-            //echo $e->getMessage();
             $logger->info($e->getMessage());
         }
     }

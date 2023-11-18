@@ -88,9 +88,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $arre = json_decode($resp, true);
             $customer = $this->customerSession->getCustomer()->getEmail();
             $increment_id = $this->Session->getLastRealOrder()->getIncrementId();
-            $order = $this->order
-            ->create()
-            ->loadByIncrementId($increment_id);
+            $order = $this->order->create()->loadByIncrementId($increment_id);
             $base = $this->scopeConfig->getValue('web/secure/base_url',\Magento\Store\Model\ScopeInterface::SCOPE_STORE); 
 
             $url = "https://api-magento.gocuotas.com/api_redirect/v1/checkouts?amount_in_cents=".
@@ -148,9 +146,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $arre = json_decode($resp, true);
             $customer = $this->customerSession->getCustomer()->getEmail();
             $increment_id = $this->Session->getLastRealOrder()->getIncrementId();
-            $order = $this->order
-            ->create()
-            ->loadByIncrementId($increment_id);
+            $order = $this->order->create()->loadByIncrementId($increment_id);
             $base = $this->scopeConfig->getValue('web/secure/base_url',\Magento\Store\Model\ScopeInterface::SCOPE_STORE); 
             $url = "https://api-magento.gocuotas.com/api_redirect/v1/checkouts?amount_in_cents=".
             ($order->getGrandTotal()*100)."&order_reference_id=".$increment_id."&url_success="
